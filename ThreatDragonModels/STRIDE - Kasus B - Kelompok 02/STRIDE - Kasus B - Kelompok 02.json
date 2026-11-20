@@ -1,0 +1,35 @@
+{
+  "version": "2.6.2",
+  "release_version": "1.0",
+  "released_at": "2026-11-20",
+  "summary": {
+    "title": "STRIDE - Kasus B - Kelompok 02",
+    "owner": "Haniel Juanta Sembiring",
+    "description": "Aplikasi web berbagi dokumen melalui tautan sementara (masa berlaku 24 jam). Pemilik dokumen yang terautentikasi mengunggah file ke Backend Dokumen yang menyimpan isi file di Object Storage serta metadata dan log audit di Database Metadata. Pemilik membuat tautan berbagi 24 jam atau mencabutnya sebelum kedaluwarsa. Penerima eksternal mengakses tautan melalui browser tanpa login untuk mengunduh file melalui Backend Dokumen. Admin organisasi dapat meninjau metadata dan log audit, tetapi tidak dapat mengakses isi file secara default.",
+    "id": 0
+  },
+  "detail": {
+    "contributors": [
+      {
+        "name": "yohanasinaga"
+      },
+      {
+        "name": "Ditttt177"
+      }
+    ],
+    "diagrams": [
+      {
+        "id": 0,
+        "title": "DFD Sistem Berbagi Dokumen",
+        "diagramType": "STRIDE",
+        "placeholder": "New STRIDE diagram description",
+        "thumbnail": "./public/content/images/thumbnail.stride.jpg",
+        "version": "2.6.2",
+        "cells": []
+      }
+    ],
+    "diagramTop": 1,
+    "reviewer": "",
+    "threatTop": 0
+  }
+}
