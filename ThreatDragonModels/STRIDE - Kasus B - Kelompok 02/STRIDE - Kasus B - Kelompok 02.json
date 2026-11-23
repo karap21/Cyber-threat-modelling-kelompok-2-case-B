@@ -283,8 +283,8 @@
                 "text": "Pemilik Dokumen (Browser)"
               },
               "body": {
-                "stroke": "#333333",
-                "strokeWidth": 1.5,
+                "stroke": "red",
+                "strokeWidth": 3,
                 "strokeDasharray": null
               }
             },
@@ -381,9 +381,23 @@
               "isTrustBoundary": false,
               "outOfScope": false,
               "reasonOutOfScope": "",
-              "hasOpenThreats": false,
+              "hasOpenThreats": true,
               "providesAuthentication": true,
-              "threats": []
+              "threats": [
+                {
+                  "id": "d4e5f6a7-7777-4000-8000-000000000007",
+                  "title": "Pembajakan Sesi atau Kredensial Akun Pemilik Dokumen untuk Membuat Tautan Berbagi Palsu",
+                  "status": "Open",
+                  "severity": "High",
+                  "type": "Spoofing",
+                  "description": "Jika penyerang dapat membajak token sesi aktif (session hijacking/XSS) atau mencuri kredensial login milik Pemilik Dokumen (Browser) lalu menyamar sebagai pemilik sah, maka bisa terjadi pembuatan tautan berbagi 24 jam secara diam-diam untuk mengekfiltrasi dokumen internal ke pihak luar maupun pencabutan tautan aktif yang mengganggu operasional. Asumsi [Asumsi 1 & Asumsi 3]: autentikasi pemilik hanya mengandalkan token sesi browser standar tanpa autentikasi multifaktor (MFA) atau verifikasi ulang saat membuat maupun mencabut tautan. Skor Risiko: Kemungkinan (2) x Dampak (3) = 6 (Tinggi).",
+                  "mitigation": "Terapkan Multi-Factor Authentication (MFA) pada akun Pemilik Dokumen dan Admin Organisasi, simpan token sesi pada cookie dengan atribut HttpOnly, Secure, dan SameSite=Strict, serta batasi masa aktif sesi idle (session timeout).",
+                  "modelType": "STRIDE",
+                  "new": false,
+                  "number": 7,
+                  "score": "6"
+                }
+              ]
             }
           },
           {
@@ -1186,8 +1200,8 @@
             "shape": "flow",
             "attrs": {
               "line": {
-                "stroke": "#333333",
-                "strokeWidth": 1.5,
+                "stroke": "red",
+                "strokeWidth": 3,
                 "targetMarker": {
                   "name": "block"
                 },
@@ -1212,8 +1226,22 @@
               "isPublicNetwork": true,
               "isBidirectional": false,
               "protocol": "HTTPS",
-              "hasOpenThreats": false,
-              "threats": [],
+              "hasOpenThreats": true,
+              "threats": [
+                {
+                  "id": "e5f6a7b8-8888-4000-8000-000000000008",
+                  "title": "Kebocoran Token Tautan Berbagi 24 Jam melalui URL di Log Jaringan dan Header HTTP Referer",
+                  "status": "Open",
+                  "severity": "High",
+                  "type": "Information disclosure",
+                  "description": "Jika identitas tautan berbagi dikirimkan secara langsung sebagai parameter URL pada aliran Permintaan akses tautan & unduh (tanpa login) menuju Backend Dokumen, maka bisa terjadi kebocoran token tautan aktif selama 24 jam melalui header HTTP Referer ke layanan eksternal, riwayat browser perangkat publik, atau log proxy jaringan sehingga pihak ketiga dapat mengunduh dokumen tanpa login. Asumsi [Asumsi 2]: token rahasia ditempatkan langsung pada URL GET dan halaman opsi unduh belum menerapkan kebijakan Referrer-Policy maupun redaksi log URL. Skor Risiko: Kemungkinan (3) x Dampak (2) = 6 (Tinggi).",
+                  "mitigation": "Terapkan header Referrer-Policy: no-referrer dan Cache-Control: no-store pada respons halaman tautan, tukarkan token URL awal menjadi short-lived session cookie melalui permintaan POST saat opsi unduh ditekan, serta lakukan masking token URL pada log akses proxy/server.",
+                  "modelType": "STRIDE",
+                  "new": false,
+                  "number": 8,
+                  "score": "6"
+                }
+              ],
               "trustBoundaryIds": [
                 "b1a2c3d4-1111-4000-8000-000000000001",
                 "fd71248a-0345-4e71-8031-9e0b1be515d7"
@@ -1298,8 +1326,8 @@
             "shape": "flow",
             "attrs": {
               "line": {
-                "stroke": "#333333",
-                "strokeWidth": 1.5,
+                "stroke": "red",
+                "strokeWidth": 3,
                 "targetMarker": {
                   "name": "block"
                 },
@@ -1324,8 +1352,22 @@
               "isPublicNetwork": false,
               "isBidirectional": false,
               "protocol": "TLS/TCP (SQL)",
-              "hasOpenThreats": false,
-              "threats": [],
+              "hasOpenThreats": true,
+              "threats": [
+                {
+                  "id": "f6a7b8c9-9999-4000-8000-000000000009",
+                  "title": "Injeksi Kueri atau Manipulasi Status Pencabutan dan Log Audit melalui Input Metadata",
+                  "status": "Open",
+                  "severity": "High",
+                  "type": "Tampering",
+                  "description": "Jika pengguna atau penyerang menyisipkan karakter khusus maupun payload berbahaya (SQL/NoSQL Injection atau Log Injection) pada nama file atau parameter tautan yang diteruskan melalui aliran Simpan metadata, status tautan & log audit menuju Database Metadata, maka bisa terjadi pengubahan tidak sah pada status pencabutan tautan (tautan yang telah dicabut menjadi aktif kembali), manipulasi waktu kedaluwarsa 24 jam, atau pemalsuan baris log audit. Asumsi [Asumsi 1 & Asumsi 5]: Backend Dokumen meneruskan input metadata nama file dan parameter URL ke kueri database/pencatat log tanpa sanitasi karakter kontrol atau parameterized query yang ketat. Skor Risiko: Kemungkinan (2) x Dampak (3) = 6 (Tinggi).",
+                  "mitigation": "Gunakan parameterized queries (prepared statements) untuk seluruh operasi baca/tulis pada Database Metadata, terapkan validasi dan sanitasi ketat pada metadata nama file (hapus karakter kontrol/kutip), serta gunakan format log audit terstruktur (JSON) dengan encoding karakter baris baru (CRLF).",
+                  "modelType": "STRIDE",
+                  "new": false,
+                  "number": 9,
+                  "score": "6"
+                }
+              ],
               "trustBoundaryIds": [
                 "fd71248a-0345-4e71-8031-9e0b1be515d7",
                 "1c81e45e-5034-4edd-8043-17db997fd69e"
@@ -1523,6 +1565,6 @@
     ],
     "diagramTop": 1,
     "reviewer": "",
-    "threatTop": 6
+    "threatTop": 9
   }
 }
